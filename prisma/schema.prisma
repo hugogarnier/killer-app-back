@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Player    Player?
+}
+
+model Player {
+  id                      Int      @id @default(autoincrement())
+  user                    User     @relation(fields: [userId], references: [id])
+  userId                  String   @unique
+  player_to_kill_id       String   @unique
+  role                    Role     @default(PLAYER)
+  action                  String
+  alive                   Boolean  @default(true)
+  code                    String
+  isWinner                Boolean  @default(false)
+  randomNumber            Int
+  confirmKill             Boolean  @default(false)
+  waitingConfirmationKill Boolean  @default(false)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  Game                    Game?    @relation(fields: [gameId], references: [id])
+  gameId                  Int?
+}
+
+model Action {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Game      Game?    @relation(fields: [gameId], references: [id])
+  gameId    Int?
+}
+
+model Game {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  code      String   @unique
+  admin     String
+  started   Boolean  @default(false)
+  ended     Boolean  @default(false)
+  actions   Action[]
+  players   Player[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  ADMIN
+  PLAYER
+}
