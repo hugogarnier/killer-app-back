@@ -13,6 +13,17 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  async validateUser(email: string, pass: string): Promise<any> {
+    const user = await this.prisma.user.findUnique({
+      where: { email: email },
+    });
+    if (user && user.password === pass) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
+
   async register(data: RegisterDto) {
     const checkUserExists = await this.prisma.user.findFirst({
       where: {
@@ -78,19 +89,6 @@ export class AuthService {
         HttpStatus.UNAUTHORIZED,
       );
     }
-  }
-
-  async profile(user_id: string) {
-    console.log(user_id);
-    return this.prisma.user.findFirst({
-      where: {
-        id: user_id,
-      },
-      select: {
-        name: true,
-        email: true,
-      },
-    });
   }
 
   generateJWT(payload: any) {

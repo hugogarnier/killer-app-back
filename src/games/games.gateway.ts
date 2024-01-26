@@ -5,7 +5,6 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { GamesService } from './games.service';
-import { UpdateGameDto } from './dto/update-game.dto';
 import { Server } from 'socket.io';
 import { Prisma } from '@prisma/client';
 
@@ -20,12 +19,6 @@ export class GamesGateway {
   @WebSocketServer()
   server: Server;
 
-  @SubscribeMessage('identity')
-  async identity(@MessageBody() data: number): Promise<number> {
-    this.server.emit('identity', data);
-    return data;
-  }
-
   @SubscribeMessage('createGame')
   create(@MessageBody() createGameDto: Prisma.GameCreateInput) {
     return this.gamesService.create(createGameDto);
@@ -37,17 +30,33 @@ export class GamesGateway {
   }
 
   @SubscribeMessage('findOneGame')
-  findOne(@MessageBody() id: number) {
-    return this.gamesService.findOne(id);
+  findOne(@MessageBody() code: string) {
+    return this.gamesService.findOne(code);
   }
 
   @SubscribeMessage('updateGame')
-  update(@MessageBody() updateGameDto: UpdateGameDto) {
-    return this.gamesService.update(updateGameDto.id, updateGameDto);
+  update(@MessageBody() updateGameDto: Prisma.GameUpdateInput) {
+    if (typeof updateGameDto.code === 'string') {
+      return this.gamesService.update(updateGameDto.code, updateGameDto);
+    } else {
+      throw new Error('Invalid code type. Expected a string.');
+    }
   }
 
   @SubscribeMessage('removeGame')
-  remove(@MessageBody() id: number) {
-    return this.gamesService.remove(id);
+  remove(@MessageBody() code: string) {
+    return this.gamesService.remove(code);
+  }
+
+  @SubscribeMessage('joinGame')
+  joinGame(
+    @MessageBody() data: { code: string; user: Prisma.UserCreateInput },
+  ) {
+    return this.gamesService.joinGame(data);
+  }
+
+  @SubscribeMessage('startGame')
+  startGame(@MessageBody() code: string) {
+    return this.gamesService.startGame(code);
   }
 }

@@ -33,4 +33,16 @@ export class UsersService {
   async remove(id: string) {
     return this.databaseService.user.delete({ where: { id } });
   }
+
+  async profile(id: string) {
+    return this.databaseService.user.findFirst({
+      where: {
+        id,
+      },
+      select: {
+        name: true,
+        email: true,
+      },
+    });
+  }
 }

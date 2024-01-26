@@ -23,11 +23,11 @@ model User {
 
 model Player {
   id                      Int      @id @default(autoincrement())
-  user                    User     @relation(fields: [userId], references: [id])
+  user                    User?    @relation(fields: [userId], references: [id])
   userId                  String   @unique
-  player_to_kill_id       String   @unique
+  player_to_kill_id       String?  @unique
   role                    Role     @default(PLAYER)
-  action                  String
+  action                  String?
   alive                   Boolean  @default(true)
   code                    String
   isWinner                Boolean  @default(false)
@@ -36,7 +36,7 @@ model Player {
   waitingConfirmationKill Boolean  @default(false)
   createdAt               DateTime @default(now())
   updatedAt               DateTime @updatedAt
-  Game                    Game?    @relation(fields: [gameId], references: [id])
+  game                    Game?    @relation(fields: [gameId], references: [id])
   gameId                  Int?
 }
 
