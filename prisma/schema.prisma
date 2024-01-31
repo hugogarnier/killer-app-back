@@ -18,14 +18,14 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Player    Player?
+  player    Player[]
 }
 
 model Player {
   id                      Int      @id @default(autoincrement())
   user                    User?    @relation(fields: [userId], references: [id])
-  userId                  String   @unique
-  player_to_kill_id       String?  @unique
+  userId                  String
+  player_to_kill_id       String?
   role                    Role     @default(PLAYER)
   action                  String?
   alive                   Boolean  @default(true)
@@ -34,10 +34,11 @@ model Player {
   randomNumber            Int
   confirmKill             Boolean  @default(false)
   waitingConfirmationKill Boolean  @default(false)
+  killedBy                String?
   createdAt               DateTime @default(now())
   updatedAt               DateTime @updatedAt
   game                    Game?    @relation(fields: [gameId], references: [id])
-  gameId                  Int?
+  gameId                  Int
 }
 
 model Action {
@@ -45,7 +46,7 @@ model Action {
   name      String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Game      Game?    @relation(fields: [gameId], references: [id])
+  game      Game?    @relation(fields: [gameId], references: [id])
   gameId    Int?
 }
 

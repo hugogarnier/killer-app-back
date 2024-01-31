@@ -29,9 +29,16 @@ export class GamesGateway {
     return this.gamesService.findAll();
   }
 
+  @SubscribeMessage('findAllGamesByUserId')
+  findAllGamesByUserId(@MessageBody() userId: string) {
+    return this.gamesService.findAllGamesByUserId(userId);
+  }
+
   @SubscribeMessage('findOneGame')
-  findOne(@MessageBody() code: string) {
-    return this.gamesService.findOne(code);
+  async findOne(@MessageBody() code: string) {
+    const game = await this.gamesService.findOne(code);
+    this.server.emit('findOneGame', game);
+    return game;
   }
 
   @SubscribeMessage('updateGame')
@@ -58,5 +65,15 @@ export class GamesGateway {
   @SubscribeMessage('startGame')
   startGame(@MessageBody() code: string) {
     return this.gamesService.startGame(code);
+  }
+
+  @SubscribeMessage('killPlayer')
+  killPlayer(@MessageBody() data: { code: string; userId: string }) {
+    return this.gamesService.killPlayer(data);
+  }
+
+  @SubscribeMessage('confirmKill')
+  confirmKill(@MessageBody() data: { code: string; userId: string }) {
+    return this.gamesService.confirmKill(data);
   }
 }

@@ -1,0 +1,67 @@
+<html>
+<head>
+  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
+  <script>
+    const socket = io('http://localhost:3000');
+    socket.on('connect', function() {
+      console.log('Connected');
+
+      // socket.emit('createGame', { name: "testALLsad", code: 'QWERY', admin: "clrues34a00002fvv4czo4poe" }, function(data){
+      //   console.log('createGame', data);
+      // });
+
+      // socket.emit('joinGame', { code: 'QWERY', user: { id: "clrsyrtl20000kyc0sjek0uoj" } }, function(data){
+      //   console.log('joinGame', data);
+      // });
+
+      // socket.emit('joinGame', { code: 'QWERT', user: { id: "clrues34a00002fvv4czo4poe" } }, function(data){
+      //   console.log('joinGame', data);
+      // });
+
+      // socket.emit('joinGame', { code: 'QWERT', user: { id: "clrues34a00002fvv4czo4poe" } }, function(data){
+      //   console.log('joinGame', data);
+      // });
+
+      // socket.emit('startGame', 'QWERY', function(data){
+      //   console.log('startGame', data);
+      // });
+
+      // socket.emit('killPlayer', { code: 'QWERY', userId: "clrq68fjr0006xejpotf83xtp" }, function(data){
+      //   console.log('killPLayer', data);
+      // });
+
+      // socket.emit('confirmKill', { code: 'QWERY', userId: "clrues34a00002fvv4czo4poe" }, function(data){
+      //   console.log('confirmKill', data);
+      // });
+
+      // socket.emit('findOneGame', 'dsfs', function(data){
+      //   console.log('findOneGame', data);
+      // });
+
+      //  socket.emit('findAllGames', function(data){
+      //   console.log('findAllGames', data);
+      // });
+
+      // socket.emit('findAllGamesByUserId', 'clrues34a00002fvv4czo4poe', function(data){
+      //   console.log('findAllGamesByUserId', data);
+      // });
+
+    });
+    socket.on('findOneGame', function(data) {
+      console.log('event', data);
+    });
+
+    socket.on('startGame', function(data) {
+      console.log('startGameEVENT', data);
+    });
+    socket.on('exception', function(data) {
+      console.log('event', data);
+    });
+    socket.on('disconnect', function() {
+      console.log('Disconnected');
+    });
+  </script>
+</head>
+
+<body></body>
+</html>
